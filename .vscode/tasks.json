@@ -1,0 +1,22 @@
+{
+  // The SM-T595's USB debugging service (adbd, Android 10) crashes on
+  // `flutter run`'s streamed install and debug connection. This task builds
+  // the APK, installs it with a plain (non-streamed) push and starts the app,
+  // which the tablet handles reliably over USB.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install & launch on tablet",
+      "type": "shell",
+      "command": "flutter build apk --debug; if ($?) { & \"$env:LOCALAPPDATA\\Android\\Sdk\\platform-tools\\adb.exe\" -s 21cdd038 install -r --no-streaming build\\app\\outputs\\flutter-apk\\app-debug.apk }; if ($?) { & \"$env:LOCALAPPDATA\\Android\\Sdk\\platform-tools\\adb.exe\" -s 21cdd038 shell am start -S -n com.example.g_lab/.MainActivity }",
+      "options": {
+        "shell": {
+          "executable": "powershell.exe",
+          "args": ["-NoProfile", "-Command"]
+        }
+      },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
+}
